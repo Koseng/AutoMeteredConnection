@@ -1,0 +1,1 @@
+schtasks /create /sc minute /tn CheckMetering /tr c:\checkMetering\startHidden.vbs /mo 5 /RL HIGHEST
