@@ -6,6 +6,7 @@ The router is identified via its MAC adress. The MAC adress can be determined vi
 In the case of Wifi, Windows saves the setting for each Wifi profile. For Ethernet the setting is reset by Windows after reboot. If a connection to an internet router with a configured MAC adresses is established, metered connection is auto activated. In case of Ethernet if a connection to a non configured router is established, metered connection is auto deactivated.
 
 ## Configuration
+In the default configuration the scripts reside in ```c:\checkMetering\```
 
 In autoMeteredConnection.ps1 configure the directory for the log files and the MAC adresses which shall be checked.
 
