@@ -1,10 +1,10 @@
 [void][Windows.Networking.Connectivity.NetworkInformation, Windows, ContentType = WindowsRuntime]
 Add-Type -AssemblyName System.Windows.Forms
-$logFile = "c:\temp\logMetered.txt" 
-$logFileOld = "c:\temp\logMetered.old"
+$logFile = "c:\checkMetering\logMetered.txt" 
+$logFileOld = "c:\checkMetering\logMetered.old"
 $msg = "Activating metered internet connection."
 
-$macsToBeMetered = @("e1-e1-ab-ff-25-4b", "55-66-77-55-fc-fc")
+$macsToBeMetered = @("e0-a3-ac-ff-24-4b", "55-66-77-55-fc-fc")
 
 function Log { Param ($text) 
     Write-Host $text
@@ -51,6 +51,7 @@ try {
                     netsh wlan set profileparameter name="$netProfileName" cost=Fixed -erroraction stop
                 }
                 else { # Ethernet
+		    New-Item $regPath -Force | Out-Null
                     Set-Itemproperty -path $regPath -Name 'UserCost' -value 2 -Force -erroraction stop
                     Restart-Service -Name DusmSvc  -Force -erroraction stop
                 }
@@ -59,6 +60,7 @@ try {
         # Reset metered for ethernet
         elseif (-not $connectionProfile.IsWlanConnectionProfile -and $netConnectionMetered) {
             Log "Deactivating metered connection. Profile=$($netProfileName)"
+	    New-Item $regPath -Force | Out-Null
             Set-Itemproperty -path $regPath -Name 'UserCost' -value 0 -Force -erroraction stop
             Restart-Service -Name DusmSvc  -Force -erroraction stop
         }
