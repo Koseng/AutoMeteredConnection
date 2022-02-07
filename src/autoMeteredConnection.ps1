@@ -32,13 +32,8 @@ try {
         $netInterfaceIP    = (Get-NetIPAddress -AddressFamily IPv4 | where ifIndex -eq $netInterfaceIndex).IPAddress
         $netProfileName    = $connectionProfile.ProfileName
         $regPath           = "HKLM:\SOFTWARE\Microsoft\DusmSvc\Profiles\$($netInterfaceGuid)\*"
-    
-        # Determine MAC of GatewayIP
-        $netGatewayMac = ""
-        $arp_output = (arp -a $netGatewayIP -n $netInterfaceIP) -join '' # create a single string
-        $isMatch = $arp_output -match "([0-9A-F]{2}([:-][0-9A-F]{2}){5})"
-        if ($isMatch) { $netGatewayMac = $Matches[0] }
-
+        # Determine gateway Mac
+        $netGatewayMac     = (Get-NetNeighbor -IPAddress $netGatewayIP).LinkLayerAddress
         Log "$($netProfileName)#$($netConnectionMetered)#$($netInterfaceGuid)#$($netInterfaceIndex)#$($netInterfaceIP)#$($netGatewayIP)#$($netGatewayMac)"
 
         # Activate metered connection if necessary
